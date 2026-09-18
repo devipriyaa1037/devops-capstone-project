@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         DOCKER_IMAGE = 'dpdevipriyaa1037/devops-capstone-app'
+        DOCKER_HOST = 'tcp://localhost:2375'
     }
 
     stages {
@@ -31,7 +32,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
+
                 bat 'docker build -t %DOCKER_IMAGE%:%BUILD_NUMBER% .'
+
                 bat 'docker tag %DOCKER_IMAGE%:%BUILD_NUMBER% %DOCKER_IMAGE%:latest'
             }
         }
@@ -48,7 +51,9 @@ pipeline {
                     )
                 ]) {
                     bat 'echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin'
+
                     bat 'docker push %DOCKER_IMAGE%:%BUILD_NUMBER%'
+
                     bat 'docker push %DOCKER_IMAGE%:latest'
                 }
             }

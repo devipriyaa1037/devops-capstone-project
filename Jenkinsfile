@@ -44,14 +44,12 @@ pipeline {
                 echo 'Pushing Docker image to Docker Hub...'
 
                 withCredentials([
-                    usernamePassword(
-                        credentialsId: 'dpdevipriyaa1037',
-                        usernameVariable: 'DOCKER_USERNAME',
-                        passwordVariable: 'DOCKER_PASSWORD'
+                    string(
+                        credentialsId: 'dockerhub-pat',
+                        variable: 'DOCKER_PASSWORD'
                     )
                 ]) {
-
-                    powershell '$env:DOCKER_PASSWORD | docker login --username $env:DOCKER_USERNAME --password-stdin'
+                    bat 'docker login -u dpdevipriyaa1037 -p %DOCKER_PASSWORD%'
 
                     bat 'docker push %DOCKER_IMAGE%:%BUILD_NUMBER%'
 
@@ -70,4 +68,4 @@ pipeline {
             echo 'Pipeline failed. Check the console output.'
         }
     }
-}
+}git add Jenkinsfile

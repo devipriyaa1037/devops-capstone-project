@@ -68,4 +68,4 @@ pipeline {
             echo 'Pipeline failed. Check the console output.'
         }
     }
-}git add Jenkinsfile
+}

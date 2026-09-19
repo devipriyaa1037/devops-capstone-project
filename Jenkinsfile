@@ -57,11 +57,23 @@ pipeline {
                 }
             }
         }
+
+        stage('Deploy to EC2') {
+            steps {
+                echo 'Deploying application to AWS EC2...'
+
+                sshagent(credentials: ['ec2-ssh']) {
+                    bat '''
+                        ssh -o StrictHostKeyChecking=no ubuntu@15.252.70.219 "docker pull dpdevipriyaa1037/devops-capstone-app:latest && docker stop devops-capstone-app || true && docker rm devops-capstone-app || true && docker run -d --name devops-capstone-app -p 3000:3000 dpdevipriyaa1037/devops-capstone-app:latest"
+                    '''
+                }
+            }
+        }
     }
 
     post {
         success {
-            echo 'CI/CD build completed successfully!'
+            echo 'CI/CD build and deployment completed successfully!'
         }
 
         failure {
